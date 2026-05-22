@@ -1,42 +1,61 @@
-import { type ComponentType, type SVGProps, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import classes from "./ZoomableMap.module.css";
 
 interface ZoomableMapProps {
-  MapComponent: ComponentType<SVGProps<SVGSVGElement>>;
+  mapUrl: string;
   guessedCountries: Set<string>;
 }
 
-function ZoomableMap({ MapComponent, guessedCountries }: Readonly<ZoomableMapProps>) {
+function ZoomableMap({ mapUrl, guessedCountries }: Readonly<ZoomableMapProps>) {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const greenCountriesSelector = Array.from(guessedCountries)
-    .map((code) => `.${code.toLowerCase()}`)
-    .join(", ");
+  const objectRef = useRef<HTMLObjectElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) {
+    const objectElement = objectRef.current;
+    if (!objectElement) {
       return;
     }
 
-    const titles = containerRef.current.querySelectorAll("title");
+    const svgDoc = objectElement.contentDocument;
+    if (!svgDoc) {
+      return;
+    }
 
+    for (const code of guessedCountries) {
+      const paths = svgDoc.querySelectorAll(`.${code.toLowerCase()}`);
+      for (const path of paths) {
+        (path as SVGPathElement).style.fill = "#22c55e";
+      }
+    }
+  }, [guessedCountries]);
+
+  const handleMapLoad = () => {
+    const objectElement = objectRef.current;
+    if (!objectElement) {
+      return;
+    }
+
+    const svgDoc = objectElement.contentDocument;
+    if (!svgDoc) {
+      return;
+    }
+
+    const titles = svgDoc.querySelectorAll("title");
     titles.forEach((title) => {
       title.remove();
     });
-  }, []);
+
+    for (const code of guessedCountries) {
+      const paths = svgDoc.querySelectorAll(`.${code.toLowerCase()}`);
+      for (const path of paths) {
+        (path as SVGPathElement).style.fill = "#22c55e";
+      }
+    }
+  };
 
   return (
     <div className={classes.mapContainer} ref={containerRef}>
-      {greenCountriesSelector && (
-        <style>{`
-          ${greenCountriesSelector} {
-            fill: #22c55e !important;
-            transition: fill 0.3s ease;
-          }
-        `}</style>
-      )}
-
       <TransformWrapper
         initialScale={1}
         minScale={1}
@@ -68,7 +87,15 @@ function ZoomableMap({ MapComponent, guessedCountries }: Readonly<ZoomableMapPro
               wrapperStyle={{ width: "100%", height: "100%" }}
               contentStyle={{ width: "100%", height: "100%" }}
             >
-              <MapComponent />
+              <object
+                ref={objectRef}
+                data={mapUrl}
+                type="image/svg+xml"
+                onLoad={handleMapLoad}
+                style={{ pointerEvents: "none" }}
+              >
+                Your browser does not support SVG layers.
+              </object>
             </TransformComponent>
           </>
         )}

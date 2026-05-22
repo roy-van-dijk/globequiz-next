@@ -16,6 +16,12 @@
 }
 
 .mapControls button {
-  padding: 5px;
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
   cursor: pointer;
+  min-width: 30px;
+  font-weight: bold;
 }

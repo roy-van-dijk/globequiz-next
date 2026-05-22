@@ -1,11 +1,8 @@
 import i18nIsoCountries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { type ChangeEvent, useRef, useState } from "react";
-import WorldMap from "../../assets/game-types/countries/world-map.svg?react";
 import ZoomableMap from "../../components/zoomable-map/ZoomableMap";
 import classes from "./Countries.module.css";
-
-i18nIsoCountries.registerLocale(enLocale);
 
 i18nIsoCountries.registerLocale(enLocale);
 
@@ -54,16 +51,10 @@ function Countries() {
     }
   };
 
-  const cssStyleRules = Array.from(guessedCountries)
-    .map((code) => `.${code.toLowerCase()} { fill: #22c55e !important; }`)
-    .join("\n");
-
   return (
     <div className={classes.guessArea}>
-      <style>{cssStyleRules}</style>
-
       <div className={classes.mapWrapper}>
-        <ZoomableMap MapComponent={WorldMap} guessedCountries={guessedCountries} />
+        <ZoomableMap mapUrl="/maps/world-map.svg" guessedCountries={guessedCountries} />
       </div>
 
       <div>Guessed {guessedCountries.size}</div>
