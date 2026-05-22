@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./main.css";
 import { HashRouter, Route, Routes } from "react-router";
 import App from "./app/App";
+import Countries from "./pages/countries/Countries";
 import Landing from "./pages/landing/Landing";
 
 const root = document.getElementById("root");
@@ -16,6 +17,7 @@ createRoot(root).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Landing />} />
+          <Route path="countries" element={<Countries />} />
         </Route>
       </Routes>
     </HashRouter>

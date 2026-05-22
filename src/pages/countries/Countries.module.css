@@ -1,0 +1,11 @@
+.guessArea {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.mapWrapper {
+  height: 500px;
+  width: 100%;
+}

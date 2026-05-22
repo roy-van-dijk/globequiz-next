@@ -1,5 +1,7 @@
+import { Link } from "react-router";
+
 function Landing() {
-  return <>landing</>;
+  return <Link to="countries">countries</Link>;
 }
 
 export default Landing;
