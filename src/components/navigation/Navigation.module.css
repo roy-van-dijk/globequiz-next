@@ -1,0 +1,35 @@
+.nav {
+  background-color: var(--color-background-dark);
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.navInner {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  max-width: var(--max-page-width);
+}
+
+.nav a {
+  height: 100%;
+}
+
+.logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+
+.logoText {
+  font-size: 24px;
+}
+
+.logoImage {
+  height: 100%;
+}

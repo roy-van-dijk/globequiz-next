@@ -1,3 +1,11 @@
+:root {
+  --color-primary: #2b87ff;
+  --color-text: #fff;
+  --color-background: #212121;
+  --color-background-dark: #1b1b1b;
+  --max-page-width: 1200px;
+}
+
 *,
 ::before,
 ::after {
@@ -12,4 +20,13 @@ html {
 
 body {
   min-height: 100%;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-family: sans-serif;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: bold;
 }
