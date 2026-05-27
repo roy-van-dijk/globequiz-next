@@ -3,6 +3,7 @@ import enLocale from "i18n-iso-countries/langs/en.json";
 import { type ChangeEvent, useRef, useState } from "react";
 import ZoomableMap from "../../components/zoomable-map/ZoomableMap";
 import classes from "./Countries.module.css";
+import { useQuizTimer } from "./useQuizTimer";
 
 i18nIsoCountries.registerLocale(enLocale);
 
@@ -25,9 +26,12 @@ const lowercaseCountriesMap: Record<string, string> = (() => {
   return map;
 })();
 
+const totalCountries = new Set(Object.values(lowercaseCountriesMap)).size;
+
 function Countries() {
   const [guessedCountries, setGuessedCountries] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
+  const { formattedTime, hasStarted, isFinished } = useQuizTimer(guessedCountries.size, totalCountries);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -57,7 +61,20 @@ function Countries() {
         <ZoomableMap mapUrl="/maps/world-map.svg" guessedCountries={guessedCountries} />
       </div>
 
-      <div>Guessed {guessedCountries.size}</div>
+      <div className={classes.statsRow}>
+        <span>Guessed {guessedCountries.size} / {totalCountries}</span>
+        {hasStarted && (
+          <span className={`${classes.timer} ${isFinished ? classes.timerFinished : ""}`}>
+            {formattedTime}
+          </span>
+        )}
+      </div>
+
+      {isFinished && (
+        <div className={classes.finishedMessage}>
+          You guessed all {totalCountries} countries in {formattedTime}!
+        </div>
+      )}
 
       <input
         ref={inputRef}
