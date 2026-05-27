@@ -5,9 +5,10 @@ import classes from "./ZoomableMap.module.css";
 interface ZoomableMapProps {
   mapUrl: string;
   guessedCountries: Set<string>;
+  missedCountries?: Set<string>;
 }
 
-function ZoomableMap({ mapUrl, guessedCountries }: Readonly<ZoomableMapProps>) {
+function ZoomableMap({ mapUrl, guessedCountries, missedCountries }: Readonly<ZoomableMapProps>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const objectRef = useRef<HTMLObjectElement>(null);
 
@@ -28,7 +29,16 @@ function ZoomableMap({ mapUrl, guessedCountries }: Readonly<ZoomableMapProps>) {
         (path as SVGPathElement).style.fill = "#22c55e";
       }
     }
-  }, [guessedCountries]);
+
+    if (missedCountries) {
+      for (const code of missedCountries) {
+        const paths = svgDoc.querySelectorAll(`.${code.toLowerCase()}`);
+        for (const path of paths) {
+          (path as SVGPathElement).style.fill = "#ef4444";
+        }
+      }
+    }
+  }, [guessedCountries, missedCountries]);
 
   const handleMapLoad = () => {
     const objectElement = objectRef.current;
@@ -50,6 +60,15 @@ function ZoomableMap({ mapUrl, guessedCountries }: Readonly<ZoomableMapProps>) {
       const paths = svgDoc.querySelectorAll(`.${code.toLowerCase()}`);
       for (const path of paths) {
         (path as SVGPathElement).style.fill = "#22c55e";
+      }
+    }
+
+    if (missedCountries) {
+      for (const code of missedCountries) {
+        const paths = svgDoc.querySelectorAll(`.${code.toLowerCase()}`);
+        for (const path of paths) {
+          (path as SVGPathElement).style.fill = "#ef4444";
+        }
       }
     }
   };
